@@ -1,0 +1,986 @@
+<!DOCTYPE html>
+<html lang="en" class="dark scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GitDeploy // Next-Gen GitHub Pages Showcase</title>
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            cyan: 'var(--accent-cyan, #06b6d4)',
+                            purple: 'var(--accent-purple, #8b5cf6)',
+                            blue: 'var(--accent-blue, #3b82f6)',
+                            dark: '#0B0F17',
+                            card: 'rgba(17, 24, 39, 0.7)',
+                            border: 'rgba(255, 255, 255, 0.1)'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['Fira Code', 'monospace']
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        :root {
+            --accent-main: #06b6d4;
+            --accent-secondary: #8b5cf6;
+        }
+
+        body {
+            background-color: #07090e;
+            color: #f3f4f6;
+            background-image: 
+                radial-gradient(circle at 50% 0%, rgba(139, 92, 246, 0.12) 0%, transparent 50%),
+                radial-gradient(circle at 0% 50%, rgba(6, 182, 212, 0.08) 0%, transparent 40%),
+                linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+            background-size: 100% 100%, 100% 100%, 40px 40px, 40px 40px;
+        }
+
+        .glass-panel {
+            background: rgba(15, 23, 42, 0.65);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .glass-card {
+            background: rgba(17, 24, 39, 0.5);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.07);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .glass-card:hover {
+            border-color: rgba(6, 182, 212, 0.4);
+            transform: translateY(-4px);
+            box-shadow: 0 12px 30px -10px rgba(6, 182, 212, 0.2);
+        }
+
+        .gradient-text {
+            background: linear-gradient(135deg, #38bdf8 0%, #a855f7 50%, #ec4899 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .dynamic-accent-text {
+            color: var(--accent-main);
+        }
+
+        .dynamic-accent-bg {
+            background-color: var(--accent-main);
+        }
+
+        .dynamic-accent-border {
+            border-color: var(--accent-main);
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #07090e;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #1e293b;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #334155;
+        }
+
+        @keyframes pulseGlow {
+            0%, 100% { opacity: 0.4; }
+            50% { opacity: 0.8; }
+        }
+
+        .glow-effect {
+            animation: pulseGlow 4s infinite ease-in-out;
+        }
+    </style>
+</head>
+<body class="font-sans antialiased selection:bg-cyan-500 selection:text-black">
+
+    <!-- Top Glow Overlay -->
+    <div class="fixed top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-96 bg-gradient-to-b from-cyan-500/10 via-purple-500/5 to-transparent pointer-events-none blur-3xl glow-effect -z-10"></div>
+
+    <!-- NAVBAR -->
+    <header class="sticky top-0 z-50 w-full glass-panel border-b border-white/10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            
+            <!-- Logo -->
+            <a href="#" class="flex items-center gap-3 group">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-cyan-500 to-purple-600 flex items-center justify-center text-white shadow-lg shadow-cyan-500/20 group-hover:scale-105 transition-transform">
+                    <i class="fa-solid fa-code-branch text-xl"></i>
+                </div>
+                <div class="flex flex-col">
+                    <span class="font-bold text-lg tracking-tight text-white flex items-center gap-1.5">
+                        GitDeploy <span class="text-xs px-2 py-0.5 rounded-full bg-cyan-500/20 text-cyan-400 font-mono border border-cyan-500/30">v2.4</span>
+                    </span>
+                    <span class="text-xs text-slate-400 font-mono">GitHub Pages Engine</span>
+                </div>
+            </a>
+
+            <!-- Desktop Nav Links -->
+            <nav class="hidden md:flex items-center gap-8 text-sm font-medium text-slate-300">
+                <a href="#features" class="hover:text-cyan-400 transition-colors">Features</a>
+                <a href="#terminal" class="hover:text-cyan-400 transition-colors">CLI Terminal</a>
+                <a href="#stack" class="hover:text-cyan-400 transition-colors">Tech Stack</a>
+                <a href="#pipeline" class="hover:text-cyan-400 transition-colors">CI/CD Pipeline</a>
+                <a href="#playground" class="hover:text-cyan-400 transition-colors">Playground</a>
+            </nav>
+
+            <!-- CTA Actions -->
+            <div class="hidden md:flex items-center gap-4">
+                <a href="https://github.com" target="_blank" class="px-4 py-2 rounded-lg text-sm font-medium text-slate-300 hover:text-white hover:bg-white/5 transition-all border border-slate-700/60 flex items-center gap-2">
+                    <i class="fa-brands fa-github text-base"></i> View Source
+                </a>
+                <a href="#pipeline" class="px-4 py-2 rounded-lg text-sm font-semibold bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-slate-950 shadow-lg shadow-cyan-500/25 transition-all hover:shadow-cyan-500/40 hover:-translate-y-0.5 flex items-center gap-2">
+                    <i class="fa-solid fa-rocket"></i> Deploy Now
+                </a>
+            </div>
+
+            <!-- Mobile Hamburger Button -->
+            <button id="mobile-menu-btn" class="md:hidden p-2 text-slate-300 hover:text-white focus:outline-none">
+                <i class="fa-solid fa-bars text-2xl"></i>
+            </button>
+        </div>
+
+        <!-- Mobile Menu Drawer -->
+        <div id="mobile-menu" class="hidden md:hidden glass-panel border-b border-white/10 px-4 pt-2 pb-6 space-y-3">
+            <a href="#features" class="block py-2 text-slate-300 hover:text-cyan-400 font-medium">Features</a>
+            <a href="#terminal" class="block py-2 text-slate-300 hover:text-cyan-400 font-medium">CLI Terminal</a>
+            <a href="#stack" class="block py-2 text-slate-300 hover:text-cyan-400 font-medium">Tech Stack</a>
+            <a href="#pipeline" class="block py-2 text-slate-300 hover:text-cyan-400 font-medium">CI/CD Pipeline</a>
+            <a href="#playground" class="block py-2 text-slate-300 hover:text-cyan-400 font-medium">Playground</a>
+            <div class="pt-4 flex flex-col gap-2">
+                <a href="https://github.com" target="_blank" class="w-full text-center py-2.5 rounded-lg text-sm font-medium text-slate-300 border border-slate-700">
+                    <i class="fa-brands fa-github"></i> GitHub Repo
+                </a>
+                <a href="#pipeline" class="w-full text-center py-2.5 rounded-lg text-sm font-semibold bg-cyan-500 text-slate-950">
+                    <i class="fa-solid fa-rocket"></i> Deploy Now
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-32 py-12">
+
+        <!-- HERO SECTION -->
+        <section class="relative pt-6 pb-12 flex flex-col items-center text-center">
+            
+            <!-- Badge -->
+            <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full glass-card text-xs sm:text-sm font-mono text-cyan-300 border border-cyan-500/30 mb-8 animate-bounce">
+                <span class="w-2 h-2 rounded-full bg-cyan-400 animate-ping"></span>
+                <i class="fa-solid fa-bolt text-yellow-400"></i>
+                <span>Deployed via GitHub Pages Actions</span>
+            </div>
+
+            <!-- Title -->
+            <h1 class="text-4xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight max-w-5xl leading-tight mb-6">
+                Building & Deploying <br class="hidden sm:inline"/>
+                <span class="gradient-text">Next-Gen Web Applications</span>
+            </h1>
+
+            <!-- Subtitle -->
+            <p class="text-lg sm:text-xl text-slate-400 max-w-3xl mb-10 font-normal leading-relaxed">
+                Empower your educational workshops with production-grade static web workflows. Commits, branch pushes, automated edge deployments, and instant global previews.
+            </p>
+
+            <!-- Dual CTAs -->
+            <div class="flex flex-col sm:flex-row items-center gap-4 mb-16 w-full sm:w-auto">
+                <a href="#features" class="w-full sm:w-auto px-8 py-4 rounded-xl text-base font-bold bg-gradient-to-r from-cyan-500 via-blue-500 to-purple-600 text-slate-950 shadow-xl shadow-cyan-500/25 hover:shadow-cyan-500/40 hover:scale-[1.02] transition-all flex items-center justify-center gap-3">
+                    <span>Explore Features</span>
+                    <i class="fa-solid fa-arrow-right"></i>
+                </a>
+                <a href="#terminal" class="w-full sm:w-auto px-8 py-4 rounded-xl text-base font-semibold glass-card text-slate-200 hover:text-white hover:border-slate-500 transition-all flex items-center justify-center gap-3">
+                    <i class="fa-solid fa-terminal text-cyan-400"></i>
+                    <span>Try CLI Terminal</span>
+                </a>
+            </div>
+
+            <!-- Terminal Hero Graphic Preview -->
+            <div class="w-full max-w-4xl rounded-2xl glass-panel border border-slate-800 shadow-2xl overflow-hidden text-left font-mono text-sm">
+                <!-- Terminal Header Bar -->
+                <div class="bg-slate-900/90 px-4 py-3 border-b border-slate-800 flex items-center justify-between">
+                    <div class="flex items-center gap-2">
+                        <span class="w-3 h-3 rounded-full bg-red-500/80 inline-block"></span>
+                        <span class="w-3 h-3 rounded-full bg-yellow-500/80 inline-block"></span>
+                        <span class="w-3 h-3 rounded-full bg-green-500/80 inline-block"></span>
+                        <span class="ml-2 text-xs text-slate-400">git-deploy-action ~ bash</span>
+                    </div>
+                    <div class="flex items-center gap-2 text-xs text-slate-500">
+                        <i class="fa-solid fa-lock text-green-400"></i> SSL Active
+                    </div>
+                </div>
+                <!-- Terminal Window Contents -->
+                <div class="p-6 space-y-3 bg-slate-950/80 text-slate-300 overflow-x-auto min-h-[220px]">
+                    <div class="flex items-center gap-2 text-slate-400">
+                        <span class="text-purple-400">user@student-pc</span>:<span class="text-cyan-400">~/my-awesome-site</span>$ <span class="text-white">git push origin main</span>
+                    </div>
+                    <div class="text-slate-400 text-xs pl-4 space-y-1">
+                        <p>Enumerating objects: 12, done.</p>
+                        <p>Counting objects: 100% (12/12), done.</p>
+                        <p>Delta compression using up to 8 threads</p>
+                        <p class="text-cyan-400">Writing objects: 100% (12/12), 4.2 KiB | 4.20 MiB/s, done.</p>
+                        <p>To https://github.com/student/my-awesome-site.git</p>
+                        <p class="text-green-400">   a4f81c9..b903e11  main -> main</p>
+                    </div>
+                    <div class="pt-2 flex items-center gap-2 text-yellow-400">
+                        <i class="fa-solid fa-circle-notch animate-spin"></i>
+                        <span>GitHub Actions: Triggered workflow 'pages-build-deployment'...</span>
+                    </div>
+                    <div class="p-3 rounded-lg bg-emerald-950/40 border border-emerald-500/30 text-emerald-400 flex items-center justify-between text-xs">
+                        <span class="flex items-center gap-2">
+                            <i class="fa-solid fa-circle-check"></i>
+                            <span>STATUS: Successfully deployed to <strong>https://student.github.io/my-awesome-site/</strong></span>
+                        </span>
+                        <span class="font-bold">2.4s</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 1: CORE FEATURES -->
+        <section id="features" class="space-y-12">
+            <div class="text-center space-y-4">
+                <span class="text-xs font-mono font-bold tracking-widest text-cyan-400 uppercase">Architecture Highlights</span>
+                <h2 class="text-3xl sm:text-4xl font-bold text-white">Engineered for Instant Publishing</h2>
+                <p class="text-slate-400 max-w-2xl mx-auto">Everything you need to demonstrate real-world deployment concepts directly from your terminal to GitHub's global CDN.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Feature 1 -->
+                <div class="glass-card p-8 rounded-2xl space-y-4">
+                    <div class="w-12 h-12 rounded-xl bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center text-cyan-400 text-xl">
+                        <i class="fa-solid fa-bolt"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-white">Lightning CI/CD Pipelines</h3>
+                    <p class="text-slate-400 text-sm leading-relaxed">Automated GitHub Actions trigger instant builds on every branch commit. Experience sub-5-second deployment times.</p>
+                </div>
+
+                <!-- Feature 2 -->
+                <div class="glass-card p-8 rounded-2xl space-y-4">
+                    <div class="w-12 h-12 rounded-xl bg-purple-500/10 border border-purple-500/30 flex items-center justify-center text-purple-400 text-xl">
+                        <i class="fa-solid fa-sliders"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-white">Zero-Config Static Hosting</h3>
+                    <p class="text-slate-400 text-sm leading-relaxed">No complex Nginx setup or server provisioning required. Just drop HTML, CSS, and JS files directly into your repository root.</p>
+                </div>
+
+                <!-- Feature 3 -->
+                <div class="glass-card p-8 rounded-2xl space-y-4">
+                    <div class="w-12 h-12 rounded-xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400 text-xl">
+                        <i class="fa-solid fa-shield-halved"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-white">Automated Free SSL</h3>
+                    <p class="text-slate-400 text-sm leading-relaxed">Every deployed site comes pre-configured with Let's Encrypt TLS/SSL certificates enforcing HTTPS automatically.</p>
+                </div>
+
+                <!-- Feature 4 -->
+                <div class="glass-card p-8 rounded-2xl space-y-4">
+                    <div class="w-12 h-12 rounded-xl bg-blue-500/10 border border-blue-500/30 flex items-center justify-center text-blue-400 text-xl">
+                        <i class="fa-solid fa-globe"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-white">Global Edge CDN</h3>
+                    <p class="text-slate-400 text-sm leading-relaxed">Fastly-powered global content distribution network guarantees ultra-low latency access worldwide for students.</p>
+                </div>
+
+                <!-- Feature 5 -->
+                <div class="glass-card p-8 rounded-2xl space-y-4 md:col-span-2 lg:col-span-2">
+                    <div class="w-12 h-12 rounded-xl bg-pink-500/10 border border-pink-500/30 flex items-center justify-center text-pink-400 text-xl">
+                        <i class="fa-solid fa-clock-rotate-left"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-white">Version-Controlled Rollbacks</h3>
+                    <p class="text-slate-400 text-sm leading-relaxed">Made a mistake during demo? Simply revert your Git commit (`git revert HEAD`) and push to automatically roll back the live static site in real-time.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 2: INTERACTIVE CLI TERMINAL -->
+        <section id="terminal" class="space-y-8">
+            <div class="text-center space-y-4">
+                <span class="text-xs font-mono font-bold tracking-widest text-cyan-400 uppercase">Interactive Terminal</span>
+                <h2 class="text-3xl sm:text-4xl font-bold text-white">Git CLI Emulator</h2>
+                <p class="text-slate-400 max-w-2xl mx-auto">Click quick-commands or type Git commands below to see realistic response logs in action.</p>
+            </div>
+
+            <div class="glass-panel rounded-2xl border border-slate-800 overflow-hidden shadow-2xl">
+                <!-- Terminal Control Header -->
+                <div class="bg-slate-900/90 px-4 py-3 border-b border-slate-800 flex flex-wrap items-center justify-between gap-4">
+                    <div class="flex items-center gap-2">
+                        <div class="flex gap-1.5">
+                            <span class="w-3 h-3 rounded-full bg-red-500 inline-block"></span>
+                            <span class="w-3 h-3 rounded-full bg-yellow-500 inline-block"></span>
+                            <span class="w-3 h-3 rounded-full bg-green-500 inline-block"></span>
+                        </div>
+                        <span class="text-xs font-mono text-slate-400 ml-2">bash - 80x24</span>
+                    </div>
+
+                    <!-- Preset Quick Commands -->
+                    <div class="flex flex-wrap gap-2 text-xs font-mono">
+                        <button onclick="runCliCommand('git init')" class="px-2.5 py-1 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 transition-colors">git init</button>
+                        <button onclick="runCliCommand('git status')" class="px-2.5 py-1 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 transition-colors">git status</button>
+                        <button onclick="runCliCommand('git add .')" class="px-2.5 py-1 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 transition-colors">git add .</button>
+                        <button onclick="runCliCommand('git commit -m &quot;feat: launch site&quot;')" class="px-2.5 py-1 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 transition-colors">git commit</button>
+                        <button onclick="runCliCommand('git push origin main')" class="px-2.5 py-1 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 transition-colors">git push</button>
+                        <button onclick="clearTerminal()" class="px-2.5 py-1 rounded bg-red-900/40 hover:bg-red-800/50 text-red-300 border border-red-700/50 transition-colors">clear</button>
+                    </div>
+                </div>
+
+                <!-- Terminal Body Output -->
+                <div id="cli-output" class="p-6 bg-slate-950 font-mono text-sm h-80 overflow-y-auto space-y-3 text-slate-300">
+                    <div class="text-slate-500">// Welcome to Interactive Git CLI Emulator v1.0</div>
+                    <div class="text-slate-500">// Type 'help' or click quick buttons above to run Git commands.</div>
+                </div>
+
+                <!-- Terminal Command Input Bar -->
+                <form id="cli-form" onsubmit="handleCliSubmit(event)" class="bg-slate-900/50 px-4 py-3 border-t border-slate-800 flex items-center gap-3">
+                    <span class="text-cyan-400 font-mono font-bold">$</span>
+                    <input type="text" id="cli-input" placeholder="Type git command here... (e.g. git status)" class="w-full bg-transparent border-none text-slate-200 font-mono text-sm focus:outline-none focus:ring-0 placeholder:text-slate-600" autocomplete="off" />
+                    <button type="submit" class="px-4 py-1.5 rounded-lg bg-cyan-500 text-slate-950 font-mono font-bold text-xs hover:bg-cyan-400 transition-colors">Run</button>
+                </form>
+            </div>
+        </section>
+
+        <!-- SECTION 3: TECH STACK SHOWCASE -->
+        <section id="stack" class="space-y-12">
+            <div class="text-center space-y-4">
+                <span class="text-xs font-mono font-bold tracking-widest text-cyan-400 uppercase">Architecture Stack</span>
+                <h2 class="text-3xl sm:text-4xl font-bold text-white">Full Stack Ecosystem</h2>
+                <p class="text-slate-400 max-w-2xl mx-auto">Explore the modern web tooling powering single-page deployments.</p>
+            </div>
+
+            <!-- Tab Buttons -->
+            <div class="flex justify-center border-b border-slate-800">
+                <div class="flex gap-2 p-1 bg-slate-900/80 rounded-xl border border-slate-800">
+                    <button onclick="switchTab('frontend')" id="tab-btn-frontend" class="tab-btn active px-6 py-2.5 rounded-lg text-sm font-semibold transition-all bg-cyan-500 text-slate-950 shadow">Frontend Core</button>
+                    <button onclick="switchTab('cicd')" id="tab-btn-cicd" class="tab-btn px-6 py-2.5 rounded-lg text-sm font-semibold transition-all text-slate-400 hover:text-white">CI/CD & Git</button>
+                    <button onclick="switchTab('infra')" id="tab-btn-infra" class="tab-btn px-6 py-2.5 rounded-lg text-sm font-semibold transition-all text-slate-400 hover:text-white">Edge Infrastructure</button>
+                </div>
+            </div>
+
+            <!-- Tab Contents -->
+            <div id="tab-contents" class="pt-4">
+                <!-- Tab 1: Frontend -->
+                <div id="tab-frontend" class="tab-panel grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <div class="glass-card p-6 rounded-xl flex items-center gap-4">
+                        <i class="fa-brands fa-html5 text-4xl text-orange-500"></i>
+                        <div>
+                            <h4 class="font-bold text-white">Semantic HTML5</h4>
+                            <p class="text-xs text-slate-400">Accessible web structures</p>
+                        </div>
+                    </div>
+                    <div class="glass-card p-6 rounded-xl flex items-center gap-4">
+                        <i class="fa-brands fa-css3-alt text-4xl text-blue-500"></i>
+                        <div>
+                            <h4 class="font-bold text-white">Tailwind CSS</h4>
+                            <p class="text-xs text-slate-400">Utility-first responsive styles</p>
+                        </div>
+                    </div>
+                    <div class="glass-card p-6 rounded-xl flex items-center gap-4">
+                        <i class="fa-brands fa-js text-4xl text-yellow-400"></i>
+                        <div>
+                            <h4 class="font-bold text-white">Vanilla ES6+ JS</h4>
+                            <p class="text-xs text-slate-400">Zero-dependency client logic</p>
+                        </div>
+                    </div>
+                    <div class="glass-card p-6 rounded-xl flex items-center gap-4">
+                        <i class="fa-solid fa-font-awesome text-4xl text-cyan-400"></i>
+                        <div>
+                            <h4 class="font-bold text-white">Vector Icons</h4>
+                            <p class="text-xs text-slate-400">FontAwesome SVG graphics</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tab 2: CI/CD & Git -->
+                <div id="tab-cicd" class="tab-panel hidden grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <div class="glass-card p-6 rounded-xl flex items-center gap-4">
+                        <i class="fa-brands fa-git-alt text-4xl text-red-500"></i>
+                        <div>
+                            <h4 class="font-bold text-white">Git Version Control</h4>
+                            <p class="text-xs text-slate-400">Distributed source tracking</p>
+                        </div>
+                    </div>
+                    <div class="glass-card p-6 rounded-xl flex items-center gap-4">
+                        <i class="fa-brands fa-github text-4xl text-purple-400"></i>
+                        <div>
+                            <h4 class="font-bold text-white">GitHub Actions</h4>
+                            <p class="text-xs text-slate-400">YAML automated workflows</p>
+                        </div>
+                    </div>
+                    <div class="glass-card p-6 rounded-xl flex items-center gap-4">
+                        <i class="fa-solid fa-code-merge text-4xl text-green-400"></i>
+                        <div>
+                            <h4 class="font-bold text-white">Branch Protection</h4>
+                            <p class="text-xs text-slate-400">Main branch deployment rules</p>
+                        </div>
+                    </div>
+                    <div class="glass-card p-6 rounded-xl flex items-center gap-4">
+                        <i class="fa-solid fa-vial-circle-check text-4xl text-cyan-400"></i>
+                        <div>
+                            <h4 class="font-bold text-white">Lint & Build Checks</h4>
+                            <p class="text-xs text-slate-400">Automated pull-request verification</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tab 3: Infrastructure -->
+                <div id="tab-infra" class="tab-panel hidden grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <div class="glass-card p-6 rounded-xl flex items-center gap-4">
+                        <i class="fa-solid fa-network-wired text-4xl text-cyan-400"></i>
+                        <div>
+                            <h4 class="font-bold text-white">GitHub CDN</h4>
+                            <p class="text-xs text-slate-400">Edge static content delivery</p>
+                        </div>
+                    </div>
+                    <div class="glass-card p-6 rounded-xl flex items-center gap-4">
+                        <i class="fa-solid fa-lock text-4xl text-emerald-400"></i>
+                        <div>
+                            <h4 class="font-bold text-white">HTTPS Enforced</h4>
+                            <p class="text-xs text-slate-400">Auto TLS certificate renewal</p>
+                        </div>
+                    </div>
+                    <div class="glass-card p-6 rounded-xl flex items-center gap-4">
+                        <i class="fa-solid fa-server text-4xl text-purple-400"></i>
+                        <div>
+                            <h4 class="font-bold text-white">Custom Domains</h4>
+                            <p class="text-xs text-slate-400">CNAME & DNS A-record support</p>
+                        </div>
+                    </div>
+                    <div class="glass-card p-6 rounded-xl flex items-center gap-4">
+                        <i class="fa-solid fa-gauge-high text-4xl text-yellow-400"></i>
+                        <div>
+                            <h4 class="font-bold text-white">100% Uptime CDN</h4>
+                            <p class="text-xs text-slate-400">High availability global servers</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 4: LIVE PIPELINE SIMULATOR -->
+        <section id="pipeline" class="space-y-8">
+            <div class="text-center space-y-4">
+                <span class="text-xs font-mono font-bold tracking-widest text-cyan-400 uppercase">Deployment Workflow</span>
+                <h2 class="text-3xl sm:text-4xl font-bold text-white">Interactive CI/CD Pipeline Visualizer</h2>
+                <p class="text-slate-400 max-w-2xl mx-auto">Click "Trigger Pipeline" to watch GitHub Pages build and deploy static files live.</p>
+            </div>
+
+            <div class="glass-panel p-8 rounded-2xl border border-slate-800 space-y-8">
+                <!-- Trigger Button Bar -->
+                <div class="flex flex-col sm:flex-row items-center justify-between gap-4 border-b border-slate-800 pb-6">
+                    <div class="flex items-center gap-3">
+                        <span class="w-3 h-3 rounded-full bg-cyan-400 animate-ping"></span>
+                        <span class="font-mono text-sm text-slate-300">Pipeline Target: <strong class="text-cyan-400">gh-pages / main</strong></span>
+                    </div>
+                    <button onclick="triggerPipeline()" id="pipeline-trigger-btn" class="w-full sm:w-auto px-6 py-3 rounded-xl font-bold bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-slate-950 shadow-lg shadow-cyan-500/20 transition-all flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-play"></i> Trigger Pipeline Run
+                    </button>
+                </div>
+
+                <!-- Pipeline Steps Grid -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 relative">
+                    <!-- Step 1 -->
+                    <div id="step-1" class="step-card glass-card p-5 rounded-xl border border-slate-800 space-y-3 relative">
+                        <div class="flex justify-between items-center text-xs font-mono">
+                            <span class="text-slate-500">STEP 01</span>
+                            <span id="step-1-status" class="px-2 py-0.5 rounded text-[10px] bg-slate-800 text-slate-400">IDLE</span>
+                        </div>
+                        <div class="font-bold text-white flex items-center gap-2">
+                            <i class="fa-solid fa-code text-cyan-400"></i> Local Commit
+                        </div>
+                        <p class="text-xs text-slate-400">Stage changes & create git commit hash.</p>
+                    </div>
+
+                    <!-- Step 2 -->
+                    <div id="step-2" class="step-card glass-card p-5 rounded-xl border border-slate-800 space-y-3 relative">
+                        <div class="flex justify-between items-center text-xs font-mono">
+                            <span class="text-slate-500">STEP 02</span>
+                            <span id="step-2-status" class="px-2 py-0.5 rounded text-[10px] bg-slate-800 text-slate-400">IDLE</span>
+                        </div>
+                        <div class="font-bold text-white flex items-center gap-2">
+                            <i class="fa-solid fa-cloud-arrow-up text-purple-400"></i> Git Push
+                        </div>
+                        <p class="text-xs text-slate-400">Upload ref specs to GitHub remote.</p>
+                    </div>
+
+                    <!-- Step 3 -->
+                    <div id="step-3" class="step-card glass-card p-5 rounded-xl border border-slate-800 space-y-3 relative">
+                        <div class="flex justify-between items-center text-xs font-mono">
+                            <span class="text-slate-500">STEP 03</span>
+                            <span id="step-3-status" class="px-2 py-0.5 rounded text-[10px] bg-slate-800 text-slate-400">IDLE</span>
+                        </div>
+                        <div class="font-bold text-white flex items-center gap-2">
+                            <i class="fa-solid fa-gears text-yellow-400"></i> Actions Build
+                        </div>
+                        <p class="text-xs text-slate-400">Run Jekyll / static site build runner.</p>
+                    </div>
+
+                    <!-- Step 4 -->
+                    <div id="step-4" class="step-card glass-card p-5 rounded-xl border border-slate-800 space-y-3 relative">
+                        <div class="flex justify-between items-center text-xs font-mono">
+                            <span class="text-slate-500">STEP 04</span>
+                            <span id="step-4-status" class="px-2 py-0.5 rounded text-[10px] bg-slate-800 text-slate-400">IDLE</span>
+                        </div>
+                        <div class="font-bold text-white flex items-center gap-2">
+                            <i class="fa-solid fa-network-wired text-blue-400"></i> CDN Sync
+                        </div>
+                        <p class="text-xs text-slate-400">Propagate artifacts to CDN edge nodes.</p>
+                    </div>
+
+                    <!-- Step 5 -->
+                    <div id="step-5" class="step-card glass-card p-5 rounded-xl border border-slate-800 space-y-3 relative">
+                        <div class="flex justify-between items-center text-xs font-mono">
+                            <span class="text-slate-500">STEP 05</span>
+                            <span id="step-5-status" class="px-2 py-0.5 rounded text-[10px] bg-slate-800 text-slate-400">IDLE</span>
+                        </div>
+                        <div class="font-bold text-white flex items-center gap-2">
+                            <i class="fa-solid fa-circle-check text-emerald-400"></i> Live Edge
+                        </div>
+                        <p class="text-xs text-slate-400">Website available live on URL.</p>
+                    </div>
+                </div>
+
+                <!-- Pipeline Progress Log Bar -->
+                <div class="p-4 rounded-xl bg-slate-950 font-mono text-xs flex items-center justify-between text-slate-400 border border-slate-800">
+                    <span id="pipeline-log" class="flex items-center gap-2">
+                        <i class="fa-solid fa-circle-info text-cyan-400"></i>
+                        <span>System ready. Click "Trigger Pipeline Run" to simulate workflow execution.</span>
+                    </span>
+                    <span id="pipeline-timer" class="text-cyan-400 font-bold">0.0s</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 5: REAL-TIME STATS & PLAYGROUND -->
+        <section id="playground" class="space-y-12">
+            <div class="text-center space-y-4">
+                <span class="text-xs font-mono font-bold tracking-widest text-cyan-400 uppercase">Live Metrics & Playground</span>
+                <h2 class="text-3xl sm:text-4xl font-bold text-white">Interactive Control Widget</h2>
+                <p class="text-slate-400 max-w-2xl mx-auto">Customize themes, test latency ping, and generate setup terminal commands.</p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <!-- Widget 1: Real-Time Metrics -->
+                <div class="glass-card p-6 rounded-2xl space-y-6">
+                    <h3 class="font-bold text-white flex items-center gap-2 text-lg">
+                        <i class="fa-solid fa-chart-line text-cyan-400"></i> Live Edge Metrics
+                    </h3>
+
+                    <div class="space-y-4">
+                        <div class="p-4 rounded-xl bg-slate-900/80 border border-slate-800 flex justify-between items-center">
+                            <div>
+                                <div class="text-xs text-slate-400">Global Uptime</div>
+                                <div class="text-xl font-mono font-bold text-emerald-400">99.998%</div>
+                            </div>
+                            <i class="fa-solid fa-shield-virus text-2xl text-emerald-500/40"></i>
+                        </div>
+
+                        <div class="p-4 rounded-xl bg-slate-900/80 border border-slate-800 flex justify-between items-center">
+                            <div>
+                                <div class="text-xs text-slate-400">Edge Latency Ping</div>
+                                <div id="ping-value" class="text-xl font-mono font-bold text-cyan-400">24 ms</div>
+                            </div>
+                            <button onclick="simulatePing()" class="px-3 py-1 rounded bg-slate-800 hover:bg-slate-700 text-xs text-slate-300 border border-slate-700">
+                                <i class="fa-solid fa-arrows-rotate"></i> Ping
+                            </button>
+                        </div>
+
+                        <div class="p-4 rounded-xl bg-slate-900/80 border border-slate-800 flex justify-between items-center">
+                            <div>
+                                <div class="text-xs text-slate-400">SSL Certificate</div>
+                                <div class="text-sm font-mono font-bold text-purple-400">TLS 1.3 / ECDHE</div>
+                            </div>
+                            <i class="fa-solid fa-lock text-xl text-purple-400/40"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Widget 2: Accent Theme Switcher -->
+                <div class="glass-card p-6 rounded-2xl space-y-6">
+                    <h3 class="font-bold text-white flex items-center gap-2 text-lg">
+                        <i class="fa-solid fa-palette text-purple-400"></i> Dynamic Accent Switcher
+                    </h3>
+                    <p class="text-xs text-slate-400">Select a theme accent color to update dynamic page elements in real-time:</p>
+
+                    <div class="grid grid-cols-2 gap-3">
+                        <button onclick="setThemeAccent('#06b6d4', '#3b82f6')" class="p-3 rounded-xl bg-slate-900 border border-cyan-500/50 hover:border-cyan-400 flex items-center gap-3">
+                            <span class="w-4 h-4 rounded-full bg-cyan-400"></span>
+                            <span class="text-xs font-mono font-bold text-slate-200">Cyan Neon</span>
+                        </button>
+                        <button onclick="setThemeAccent('#8b5cf6', '#ec4899')" class="p-3 rounded-xl bg-slate-900 border border-purple-500/50 hover:border-purple-400 flex items-center gap-3">
+                            <span class="w-4 h-4 rounded-full bg-purple-500"></span>
+                            <span class="text-xs font-mono font-bold text-slate-200">Purple Haze</span>
+                        </button>
+                        <button onclick="setThemeAccent('#10b981', '#06b6d4')" class="p-3 rounded-xl bg-slate-900 border border-emerald-500/50 hover:border-emerald-400 flex items-center gap-3">
+                            <span class="w-4 h-4 rounded-full bg-emerald-400"></span>
+                            <span class="text-xs font-mono font-bold text-slate-200">Emerald Cyber</span>
+                        </button>
+                        <button onclick="setThemeAccent('#f59e0b', '#ef4444')" class="p-3 rounded-xl bg-slate-900 border border-amber-500/50 hover:border-amber-400 flex items-center gap-3">
+                            <span class="w-4 h-4 rounded-full bg-amber-400"></span>
+                            <span class="text-xs font-mono font-bold text-slate-200">Amber Ember</span>
+                        </button>
+                    </div>
+
+                    <div class="p-4 rounded-xl bg-slate-950 text-xs font-mono text-slate-400 border border-slate-800">
+                        Active Accent Color: <span id="current-accent-hex" class="text-cyan-400 font-bold">#06b6d4</span>
+                    </div>
+                </div>
+
+                <!-- Widget 3: Setup Code Snippet Generator -->
+                <div class="glass-card p-6 rounded-2xl space-y-6">
+                    <div class="flex justify-between items-center">
+                        <h3 class="font-bold text-white flex items-center gap-2 text-lg">
+                            <i class="fa-solid fa-terminal text-yellow-400"></i> Deployment Script
+                        </h3>
+                        <button onclick="copySnippet()" class="px-3 py-1 rounded bg-slate-800 hover:bg-slate-700 text-xs text-slate-300 border border-slate-700 flex items-center gap-1.5">
+                            <i id="copy-icon" class="fa-regular fa-copy"></i>
+                            <span id="copy-text">Copy</span>
+                        </button>
+                    </div>
+
+                    <div class="p-4 rounded-xl bg-slate-950 border border-slate-800 font-mono text-xs text-cyan-300 overflow-x-auto space-y-2">
+                        <p class="text-slate-500"># Command steps for students</p>
+                        <p><span class="text-purple-400">git</span> init</p>
+                        <p><span class="text-purple-400">git</span> add .</p>
+                        <p><span class="text-purple-400">git</span> commit -m <span class="text-emerald-300">"Deploy demo site"</span></p>
+                        <p><span class="text-purple-400">git</span> branch -M main</p>
+                        <p><span class="text-purple-400">git</span> remote add origin &lt;YOUR_REPO_URL&gt;</p>
+                        <p><span class="text-purple-400">git</span> push -u origin main</p>
+                    </div>
+
+                    <div id="toast-message" class="hidden p-3 rounded-lg bg-cyan-950/80 border border-cyan-500/40 text-cyan-300 text-xs flex items-center gap-2">
+                        <i class="fa-solid fa-circle-check"></i> Command snippet copied to clipboard!
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="border-t border-slate-800/80 glass-panel mt-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-8">
+            <div class="flex flex-col md:flex-row items-center justify-between gap-6">
+                <!-- Branding -->
+                <div class="flex items-center gap-3">
+                    <div class="w-8 h-8 rounded-lg bg-gradient-to-tr from-cyan-500 to-purple-600 flex items-center justify-center text-white font-bold text-sm">
+                        <i class="fa-solid fa-code-branch"></i>
+                    </div>
+                    <span class="font-bold text-lg text-white">GitDeploy</span>
+                    <span class="text-xs text-slate-500 font-mono">| GitHub Pages Educational Platform</span>
+                </div>
+
+                <!-- Navigation Links -->
+                <div class="flex flex-wrap items-center gap-6 text-sm text-slate-400">
+                    <a href="#features" class="hover:text-cyan-400 transition-colors">Features</a>
+                    <a href="#terminal" class="hover:text-cyan-400 transition-colors">Terminal</a>
+                    <a href="#stack" class="hover:text-cyan-400 transition-colors">Stack</a>
+                    <a href="#pipeline" class="hover:text-cyan-400 transition-colors">Pipeline</a>
+                    <a href="#playground" class="hover:text-cyan-400 transition-colors">Playground</a>
+                </div>
+
+                <!-- Social Icons -->
+                <div class="flex items-center gap-4 text-slate-400">
+                    <a href="https://github.com" target="_blank" class="hover:text-cyan-400 text-lg transition-colors"><i class="fa-brands fa-github"></i></a>
+                    <a href="https://twitter.com" target="_blank" class="hover:text-cyan-400 text-lg transition-colors"><i class="fa-brands fa-x-twitter"></i></a>
+                    <a href="https://discord.com" target="_blank" class="hover:text-cyan-400 text-lg transition-colors"><i class="fa-brands fa-discord"></i></a>
+                </div>
+            </div>
+
+            <div class="pt-6 border-t border-slate-800/60 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500 font-mono">
+                <!-- System Status -->
+                <div class="flex items-center gap-2">
+                    <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                    <span class="text-slate-300">All Systems Operational 🟢</span>
+                </div>
+
+                <!-- Tagline -->
+                <div>
+                    Deployed with <i class="fa-solid fa-heart text-red-500"></i> on <a href="https://pages.github.com" target="_blank" class="text-cyan-400 hover:underline">GitHub Pages</a>
+                </div>
+
+                <!-- Copyright -->
+                <div>
+                    &copy; 2026 GitDeploy Showcase. MIT Licensed.
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- INTERACTIVE JAVASCRIPT -->
+    <script>
+        // Mobile Menu Toggle Logic
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        // Tab Switcher Logic
+        function switchTab(tabId) {
+            // Hide all panels
+            document.querySelectorAll('.tab-panel').forEach(panel => {
+                panel.classList.add('hidden');
+            });
+            // Reset button active styles
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('bg-cyan-500', 'text-slate-950', 'shadow');
+                btn.classList.add('text-slate-400');
+            });
+
+            // Show target panel
+            document.getElementById(`tab-${tabId}`).classList.remove('hidden');
+
+            // Style active button
+            const activeBtn = document.getElementById(`tab-btn-${tabId}`);
+            activeBtn.classList.add('bg-cyan-500', 'text-slate-950', 'shadow');
+            activeBtn.classList.remove('text-slate-400');
+        }
+
+        // Terminal CLI Emulator Logic
+        const cliOutput = document.getElementById('cli-output');
+        const cliInput = document.getElementById('cli-input');
+
+        const cliResponses = {
+            'git init': [
+                '<span class="text-green-400">Initialized empty Git repository in /home/student/my-awesome-site/.git/</span>'
+            ],
+            'git status': [
+                'On branch main',
+                'Your branch is up to date with \'origin/main\'.',
+                '',
+                'Untracked files:',
+                '  (use "git add <file>..." to include in what will be committed)',
+                '        <span class="text-red-400">index.html</span>',
+                '        <span class="text-red-400">styles.css</span>',
+                '        <span class="text-red-400">script.js</span>',
+                '',
+                'nothing added to commit but untracked files present (use "git add" to track)'
+            ],
+            'git add .': [
+                '<span class="text-cyan-400">Staged 3 files for commit.</span>',
+                'index.html [A]',
+                'styles.css [A]',
+                'script.js [A]'
+            ],
+            'git commit -m "feat: launch site"': [
+                '[main 8f3a12b] feat: launch site',
+                ' 3 files changed, 482 insertions(+)',
+                ' create mode 100644 index.html',
+                ' create mode 100644 styles.css',
+                ' create mode 100644 script.js'
+            ],
+            'git push origin main': [
+                'Enumerating objects: 5, done.',
+                'Counting objects: 100% (5/5), done.',
+                'Writing objects: 100% (5/5), 3.2 KiB | 3.20 MiB/s, done.',
+                'Total 5 (delta 0), reused 0 (delta 0)',
+                'To https://github.com/student/my-awesome-site.git',
+                '   1b3e4d5..8f3a12b  main -> main',
+                '<span class="text-emerald-400">⚡ GitHub Actions runner triggered pages-build-deployment!</span>'
+            ],
+            'help': [
+                'Available commands:',
+                '  <span class="text-cyan-400">git init</span>                  - Initialize git repo',
+                '  <span class="text-cyan-400">git status</span>                - Check working directory status',
+                '  <span class="text-cyan-400">git add .</span>                 - Stage all files',
+                '  <span class="text-cyan-400">git commit -m "..."</span>       - Commit staged changes',
+                '  <span class="text-cyan-400">git push origin main</span>      - Push to remote branch',
+                '  <span class="text-cyan-400">clear</span>                     - Clear terminal window'
+            ]
+        };
+
+        function runCliCommand(cmd) {
+            // Append Command Prompt line
+            const promptLine = document.createElement('div');
+            promptLine.className = 'flex items-center gap-2 text-slate-300 font-bold';
+            promptLine.innerHTML = `<span class="text-purple-400">student@pc</span>:<span class="text-cyan-400">~/app</span>$ ${cmd}`;
+            cliOutput.appendChild(promptLine);
+
+            // Handle Response
+            const cleanCmd = cmd.trim();
+            if (cleanCmd === 'clear') {
+                clearTerminal();
+                return;
+            }
+
+            const responseLines = cliResponses[cleanCmd] || [
+                `<span class="text-red-400">bash: command not found: ${cleanCmd}</span>. Type '<span class="text-cyan-400">help</span>' for available commands.`
+            ];
+
+            responseLines.forEach(line => {
+                const lineElem = document.createElement('div');
+                lineElem.className = 'text-slate-400 text-xs pl-2';
+                lineElem.innerHTML = line;
+                cliOutput.appendChild(lineElem);
+            });
+
+            // Auto-scroll
+            cliOutput.scrollTop = cliOutput.scrollHeight;
+        }
+
+        function handleCliSubmit(e) {
+            e.preventDefault();
+            const val = cliInput.value.trim();
+            if (val) {
+                runCliCommand(val);
+                cliInput.value = '';
+            }
+        }
+
+        function clearTerminal() {
+            cliOutput.innerHTML = '<div class="text-slate-500">// Terminal cleared. Ready for commands.</div>';
+        }
+
+        // CI/CD Pipeline Simulator Logic
+        let isPipelineRunning = false;
+
+        function triggerPipeline() {
+            if (isPipelineRunning) return;
+            isPipelineRunning = true;
+
+            const btn = document.getElementById('pipeline-trigger-btn');
+            const log = document.getElementById('pipeline-log');
+            const timer = document.getElementById('pipeline-timer');
+            
+            btn.disabled = true;
+            btn.classList.add('opacity-50', 'cursor-not-allowed');
+
+            let elapsed = 0.0;
+            const timerInterval = setInterval(() => {
+                elapsed += 0.1;
+                timer.textContent = `${elapsed.toFixed(1)}s`;
+            }, 100);
+
+            // Reset step UI
+            for (let i = 1; i <= 5; i++) {
+                const card = document.getElementById(`step-${i}`);
+                const status = document.getElementById(`step-${i}-status`);
+                card.className = 'step-card glass-card p-5 rounded-xl border border-slate-800 space-y-3 relative';
+                status.className = 'px-2 py-0.5 rounded text-[10px] bg-slate-800 text-slate-400';
+                status.textContent = 'IDLE';
+            }
+
+            // Step sequence timeline
+            const steps = [
+                { id: 1, name: 'Local Commit', log: 'Staging & committing local changes...' },
+                { id: 2, name: 'Git Push', log: 'Uploading commit objects to origin/main...' },
+                { id: 3, name: 'Actions Build', log: 'GitHub Actions building static asset artifact...' },
+                { id: 4, name: 'CDN Sync', log: 'Syncing generated bundle across global edge caches...' },
+                { id: 5, name: 'Live Edge', log: 'Deployment successful! Available live on https://student.github.io' }
+            ];
+
+            steps.forEach((step, index) => {
+                setTimeout(() => {
+                    // Update step UI
+                    const card = document.getElementById(`step-${step.id}`);
+                    const status = document.getElementById(`step-${step.id}-status`);
+
+                    if (index > 0) {
+                        const prevCard = document.getElementById(`step-${steps[index-1].id}`);
+                        const prevStatus = document.getElementById(`step-${steps[index-1].id}-status`);
+                        prevCard.classList.add('border-emerald-500/50', 'bg-emerald-950/20');
+                        prevStatus.className = 'px-2 py-0.5 rounded text-[10px] bg-emerald-900/60 text-emerald-300';
+                        prevStatus.textContent = 'DONE';
+                    }
+
+                    card.classList.add('border-cyan-500/80', 'bg-cyan-950/20', 'animate-pulse');
+                    status.className = 'px-2 py-0.5 rounded text-[10px] bg-cyan-900/60 text-cyan-300';
+                    status.textContent = 'RUNNING';
+
+                    log.innerHTML = `<i class="fa-solid fa-spinner animate-spin text-cyan-400"></i> <span>${step.log}</span>`;
+
+                    if (index === steps.length - 1) {
+                        setTimeout(() => {
+                            card.classList.remove('animate-pulse');
+                            card.classList.add('border-emerald-500/80', 'bg-emerald-950/30');
+                            status.className = 'px-2 py-0.5 rounded text-[10px] bg-emerald-900/80 text-emerald-300';
+                            status.textContent = 'LIVE ⚡';
+
+                            log.innerHTML = `<i class="fa-solid fa-circle-check text-emerald-400"></i> <span class="text-emerald-300 font-bold">Pipeline succeeded in ${elapsed.toFixed(1)}s! Website is live.</span>`;
+                            clearInterval(timerInterval);
+                            btn.disabled = false;
+                            btn.classList.remove('opacity-50', 'cursor-not-allowed');
+                            isPipelineRunning = false;
+                        }, 800);
+                    }
+                }, (index + 1) * 900);
+            });
+        }
+
+        // Simulate Edge Latency Ping
+        function simulatePing() {
+            const pingElem = document.getElementById('ping-value');
+            pingElem.textContent = '...';
+            setTimeout(() => {
+                const randomPing = Math.floor(Math.random() * (35 - 14 + 1)) + 14;
+                pingElem.textContent = `${randomPing} ms`;
+            }, 300);
+        }
+
+        // Dynamic Accent Switcher Logic
+        function setThemeAccent(primaryHex, secondaryHex) {
+            document.documentElement.style.setProperty('--accent-main', primaryHex);
+            document.documentElement.style.setProperty('--accent-secondary', secondaryHex);
+            document.getElementById('current-accent-hex').textContent = primaryHex;
+        }
+
+        // Copy Code Snippet Logic
+        function copySnippet() {
+            const codeText = `git init\ngit add .\ngit commit -m "Deploy demo site"\ngit branch -M main\ngit remote add origin <YOUR_REPO_URL>\ngit push -u origin main`;
+            
+            // Clipboard copy with fallback
+            if (navigator.clipboard) {
+                navigator.clipboard.writeText(codeText);
+            } else {
+                const tempTextArea = document.createElement('textarea');
+                tempTextArea.value = codeText;
+                document.body.appendChild(tempTextArea);
+                tempTextArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(tempTextArea);
+            }
+
+            const copyText = document.getElementById('copy-text');
+            const copyIcon = document.getElementById('copy-icon');
+            const toast = document.getElementById('toast-message');
+
+            copyText.textContent = 'Copied!';
+            copyIcon.className = 'fa-solid fa-check text-green-400';
+            toast.classList.remove('hidden');
+
+            setTimeout(() => {
+                copyText.textContent = 'Copy';
+                copyIcon.className = 'fa-regular fa-copy';
+                toast.classList.add('hidden');
+            }, 3000);
+        }
+    </script>
+</body>
+</html>

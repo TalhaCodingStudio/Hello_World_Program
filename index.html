@@ -3,16 +3,43 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>GitHub Pages Demo Landing Page</title>
     <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <h2>Our first interactive session</h2>
-    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Et dolore repellendus pariatur ducimus maxime adipisci aperiam quo sint! Impedit eos commodi quod! Sit iusto hic excepturi? Vitae repudiandae id officia.
-    Fugit inventore pariatur voluptatem maxime reiciendis amet ea ipsum officiis error ullam saepe quod, repellat exercitationem sapiente consectetur doloremque, recusandae voluptas fugiat autem! Quos, quidem reprehenderit. Quasi, voluptatibus? Enim, ab.
-    Vitae mollitia veritatis minus dolorum aliquam tempora esse magni ullam exercitationem quaerat nobis, expedita est unde modi iusto, officiis officia error, consequuntur omnis hic iure eum soluta quibusdam distinctio. Omnis?
-    Earum vel quia dolor molestias veritatis, nisi officia, iure totam rerum obcaecati nulla laborum accusantium perferendis mollitia quisquam deleniti quos. Est dolor, cupiditate officiis sed natus impedit placeat laudantium nemo?
-    In alias beatae fugiat soluta eaque commodi sequi provident nesciunt ad voluptates similique officia voluptas natus quis facilis, consequatur saepe harum expedita, reiciendis ab, voluptate suscipit odio molestiae? Illum, distinctio.</p>
+    <div class="background-glow"></div>
+    
+    <header>
+        <nav class="container">
+            <div class="logo">🚀 DeployDemo</div>
+            <button id="theme-toggle" class="btn-secondary">🌙 Toggle Mode</button>
+        </nav>
+    </header>
+
+    <main class="container">
+        <section class="hero">
+            <span class="badge">Live on GitHub Pages</span>
+            <h1>Successfully Deployed to the Web!</h1>
+            <p>Congratulations on committing, pushing, and hosting your code. You have successfully published a static site using Git & GitHub.</p>
+            
+            <div class="interactive-card">
+                <h3>Try the Interactive Counter</h3>
+                <p>Verify JavaScript functionality below:</p>
+                <div class="counter-display" id="counter">0</div>
+                <div class="button-group">
+                    <button id="decrement" class="btn-outline">- Decrease</button>
+                    <button id="reset" class="btn-outline">Reset</button>
+                    <button id="increment" class="btn-primary">+ Increase</button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>Built with HTML, CSS, & JavaScript • Hosted on GitHub Pages</p>
+    </footer>
+
     <script src="script.js"></script>
 </body>
 </html>
